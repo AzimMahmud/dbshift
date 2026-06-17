@@ -1,0 +1,46 @@
+# .NET build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+
+# IDE
+.idea/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+.nuget/
+
+# Test results
+[Tt]est[Rr]esult*/
+TestResults/
+coverage*.xml
+coverage*.json
+coverage*.info
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Published binaries
+dist/
+nupkg/
+
+# Local runtime artifacts
+Database/Artifacts/*
+Database/Reports/*
+!Database/Artifacts/.gitkeep
+!Database/Reports/.gitkeep

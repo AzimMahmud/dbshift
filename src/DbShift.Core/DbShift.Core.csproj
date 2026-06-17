@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>DbShift.Core</RootNamespace>
+    <Description>Domain model, enums, entities and abstractions for the database migration platform.</Description>
+  </PropertyGroup>
+
+</Project>

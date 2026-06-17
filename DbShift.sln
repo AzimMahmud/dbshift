@@ -1,0 +1,64 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3300D355-C3B0-4A80-B17C-48F44D19B54A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbShift.Core", "src\DbShift.Core\DbShift.Core.csproj", "{6F3F252F-727E-4DCD-B3DE-C8FDD0E99C2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbShift.Engine", "src\DbShift.Engine\DbShift.Engine.csproj", "{CFA9CE44-0FB7-4273-A5E8-8298027B2209}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbShift.Infrastructure", "src\DbShift.Infrastructure\DbShift.Infrastructure.csproj", "{110A69EF-2906-4431-A109-1FE35B0CA9D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbShift.Reports", "src\DbShift.Reports\DbShift.Reports.csproj", "{E02016CF-CBE0-4EE3-9F3B-23841705F190}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbShift.CLI", "src\DbShift.CLI\DbShift.CLI.csproj", "{B35ED00B-1626-450F-9721-204B2E3A3AB3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9B3168AC-EAB0-4E5C-8187-42D54D4B48A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbShift.Engine.Tests", "tests\DbShift.Engine.Tests\DbShift.Engine.Tests.csproj", "{7D3B8D83-0D08-453D-BFED-87F3A78CC736}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F3F252F-727E-4DCD-B3DE-C8FDD0E99C2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F3F252F-727E-4DCD-B3DE-C8FDD0E99C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F3F252F-727E-4DCD-B3DE-C8FDD0E99C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F3F252F-727E-4DCD-B3DE-C8FDD0E99C2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFA9CE44-0FB7-4273-A5E8-8298027B2209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA9CE44-0FB7-4273-A5E8-8298027B2209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA9CE44-0FB7-4273-A5E8-8298027B2209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA9CE44-0FB7-4273-A5E8-8298027B2209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{110A69EF-2906-4431-A109-1FE35B0CA9D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{110A69EF-2906-4431-A109-1FE35B0CA9D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{110A69EF-2906-4431-A109-1FE35B0CA9D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{110A69EF-2906-4431-A109-1FE35B0CA9D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E02016CF-CBE0-4EE3-9F3B-23841705F190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E02016CF-CBE0-4EE3-9F3B-23841705F190}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E02016CF-CBE0-4EE3-9F3B-23841705F190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E02016CF-CBE0-4EE3-9F3B-23841705F190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B35ED00B-1626-450F-9721-204B2E3A3AB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B35ED00B-1626-450F-9721-204B2E3A3AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B35ED00B-1626-450F-9721-204B2E3A3AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B35ED00B-1626-450F-9721-204B2E3A3AB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D3B8D83-0D08-453D-BFED-87F3A78CC736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D3B8D83-0D08-453D-BFED-87F3A78CC736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D3B8D83-0D08-453D-BFED-87F3A78CC736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D3B8D83-0D08-453D-BFED-87F3A78CC736}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F3F252F-727E-4DCD-B3DE-C8FDD0E99C2B} = {3300D355-C3B0-4A80-B17C-48F44D19B54A}
+		{CFA9CE44-0FB7-4273-A5E8-8298027B2209} = {3300D355-C3B0-4A80-B17C-48F44D19B54A}
+		{110A69EF-2906-4431-A109-1FE35B0CA9D0} = {3300D355-C3B0-4A80-B17C-48F44D19B54A}
+		{E02016CF-CBE0-4EE3-9F3B-23841705F190} = {3300D355-C3B0-4A80-B17C-48F44D19B54A}
+		{B35ED00B-1626-450F-9721-204B2E3A3AB3} = {3300D355-C3B0-4A80-B17C-48F44D19B54A}
+		{7D3B8D83-0D08-453D-BFED-87F3A78CC736} = {9B3168AC-EAB0-4E5C-8187-42D54D4B48A9}
+	EndGlobalSection
+EndProject

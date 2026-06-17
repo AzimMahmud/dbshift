@@ -1,0 +1,28 @@
+{
+  "migration": {
+    "version": "1.0.0",
+    "database": {
+      "provider": "postgresql",
+      "connectionString": "${DB_CONNECTION_STRING}"
+    },
+    "scripts": {
+      "path": "./Database/Migrations",
+      "pattern": "V*__*.sql",
+      "rollbackPattern": "U*__*.sql"
+    },
+    "tracking": {
+      "schema": "public",
+      "tableName": "__migration_history"
+    },
+    "execution": {
+      "lockTimeoutSeconds": 300,
+      "commandTimeoutSeconds": 3600,
+      "batchSize": 10,
+      "stopOnFailure": true
+    },
+    "approval": {
+      "requireApproval": ["production"],
+      "approvers": ["admin@company.com"]
+    }
+  }
+}

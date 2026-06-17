@@ -1,0 +1,22 @@
+{
+  "name": "production",
+  "database": {
+    "host": "${PROD_DB_HOST}",
+    "port": 5432,
+    "name": "fooddelivery_prod",
+    "schema": "public"
+  },
+  "migration": {
+    "requireApproval": true,
+    "allowRollback": true,
+    "lockTimeoutSeconds": 300,
+    "maxBatchSize": 5,
+    "allowedRoles": ["admin", "deployer"]
+  },
+  "deploymentWindow": {
+    "enabled": true,
+    "startTime": "02:00",
+    "endTime": "06:00",
+    "allowedDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+  }
+}

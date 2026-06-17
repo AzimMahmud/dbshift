@@ -1,0 +1,13 @@
+-- Migration: {{NAME}}
+-- Author: {{AUTHOR}}
+-- Created: {{DATE}}
+-- Description: {{DESCRIPTION}}
+-- Type: Data Migration (Seed/Master/Reference Data)
+
+-- TODO: Add your data migration here
+-- Example:
+-- INSERT INTO example_table (id, name, created_at_utc)
+-- VALUES 
+--     (gen_random_uuid(), 'Example 1', NOW()),
+--     (gen_random_uuid(), 'Example 2', NOW())
+-- ON CONFLICT (name) DO NOTHING;

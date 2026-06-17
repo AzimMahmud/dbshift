@@ -1,0 +1,12 @@
+-- Migration: {{NAME}}
+-- Author: {{AUTHOR}}
+-- Created: {{DATE}}
+-- Description: {{DESCRIPTION}}
+
+-- TODO: Add your SQL migration here
+-- Example:
+-- CREATE TABLE IF NOT EXISTS example_table (
+--     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--     name VARCHAR(255) NOT NULL,
+--     created_at_utc TIMESTAMP NOT NULL DEFAULT NOW()
+-- );
