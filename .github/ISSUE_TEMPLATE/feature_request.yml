@@ -1,0 +1,40 @@
+name: Feature Request
+description: Suggest an idea for DbShift
+labels: [enhancement]
+
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for suggesting an idea.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the pain point or use case.
+      placeholder: When I need to..., it's difficult because...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What should DbShift do differently?
+      placeholder: Add a new command `dbshift ...` that ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What workarounds have you tried?
+      placeholder: I currently work around this by...
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Would you implement this?
+      options:
+        - label: I'd be willing to submit a PR for this feature

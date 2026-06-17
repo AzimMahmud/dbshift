@@ -1,0 +1,71 @@
+name: Bug Report
+description: Report a problem with DbShift
+labels: [bug]
+
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to fill out this bug report.
+
+  - type: input
+    id: version
+    attributes:
+      label: DbShift version
+      description: Output of `dbshift --version`
+      placeholder: e.g. 1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS and architecture
+      placeholder: e.g. Windows 11 x64, Ubuntu 22.04 arm64
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: Installation method
+      options:
+        - Standalone binary
+        - .NET global tool
+        - Built from source
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Include the exact command you ran, the full output, and what you expected to happen.
+      placeholder: |
+        Command:
+          dbshift validate
+
+        Output:
+          ...
+
+        Expected: all scripts should be valid
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Minimal reproduction steps.
+      placeholder: |
+        1. Run `dbshift new -n Test`
+        2. Create a migration...
+        3. Run `dbshift validate`
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Verbose output
+      description: Run with `--verbose` and paste the output.
+      render: shell

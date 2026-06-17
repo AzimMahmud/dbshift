@@ -1,0 +1,32 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.cs]
+indent_size = 4
+indent_style = space
+
+[*.{csproj,props,targets}]
+indent_size = 2
+indent_style = space
+
+[*.{json,yml,yaml}]
+indent_size = 2
+indent_style = space
+
+[*.md]
+trim_trailing_whitespace = false
+
+[{*.sh,*.ps1}]
+indent_size = 4
+indent_style = space
+end_of_line = lf
+
+[Makefile]
+indent_style = tab

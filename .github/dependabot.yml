@@ -1,0 +1,42 @@
+version: 2
+
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: UTC
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - nuget
+    groups:
+      production-dependencies:
+        patterns:
+          - 'Npgsql*'
+          - 'Microsoft.Data.SqlClient*'
+          - 'MySqlConnector*'
+          - 'Microsoft.Data.Sqlite*'
+          - 'Microsoft.Extensions.*'
+          - 'Spectre.Console*'
+      test-dependencies:
+        patterns:
+          - 'xunit*'
+          - 'Microsoft.NET.Test.Sdk*'
+          - 'coverlet*'
+          - 'FluentAssertions*'
+          - 'NSubstitute*'
+          - 'Testcontainers*'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: UTC
+    labels:
+      - dependencies
+      - github-actions

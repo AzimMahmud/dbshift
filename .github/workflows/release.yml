@@ -1,0 +1,173 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        rid:
+          - win-x64
+          - linux-x64
+          - linux-arm64
+          - osx-x64
+          - osx-arm64
+        include:
+          - rid: win-x64
+            ext: .exe
+            compress: zip
+          - rid: linux-x64
+            ext: ''
+            compress: tar.gz
+          - rid: linux-arm64
+            ext: ''
+            compress: tar.gz
+          - rid: osx-x64
+            ext: ''
+            compress: tar.gz
+          - rid: osx-arm64
+            ext: ''
+            compress: tar.gz
+      fail-fast: false
+
+    runs-on: ${{ contains(matrix.rid, 'win') && 'windows-latest' || contains(matrix.rid, 'osx') && 'macos-latest' || 'ubuntu-latest' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish (${{ matrix.rid }})
+        run: dotnet publish src/DbShift.CLI \
+          --configuration Release \
+          --runtime ${{ matrix.rid }} \
+          --self-contained true \
+          --output ./publish/${{ matrix.rid }} \
+          -p:PublishSingleFile=true \
+          -p:DebugType=none
+
+      - name: Rename binary
+        shell: bash
+        run: |
+          mv ./publish/${{ matrix.rid }}/dbshift${{ matrix.ext }} ./dbshift${{ matrix.ext }}
+
+      - name: Compress (zip)
+        if: matrix.compress == 'zip'
+        run: Compress-Archive -Path ./dbshift.exe -DestinationPath ./dbshift-${{ matrix.rid }}.zip
+
+      - name: Compress (tar.gz)
+        if: matrix.compress == 'tar.gz'
+        run: tar -czf ./dbshift-${{ matrix.rid }}.tar.gz ./dbshift${{ matrix.ext }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbshift-${{ matrix.rid }}
+          path: ./dbshift-${{ matrix.rid }}.*
+          if-no-files-found: error
+
+  publish-nuget:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Pack
+        run: dotnet pack src/DbShift.CLI \
+          --configuration Release \
+          --output ./nupkg \
+          -p:IncludeSymbols=true \
+          -p:SymbolPackageFormat=snupkg \
+          -p:ContinuousIntegrationBuild=true
+
+      - name: Push to NuGet
+        run: dotnet nuget push ./nupkg/*.nupkg \
+          --source https://api.nuget.org/v3/index.json \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --skip-duplicate
+
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkg
+          path: ./nupkg/*.nupkg
+
+  create-release:
+    needs: [build, publish-nuget]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: ./release-artifacts
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          cat <<EOF > ./release-notes.md
+          # DbShift $TAG
+
+          ## Installation
+
+          \`\`\`bash
+          # .NET global tool
+          dotnet tool install --global DbShift --version ${TAG#v}
+
+          # Linux / macOS
+          curl -fsSL https://github.com/${{ github.repository }}/releases/download/$TAG/install.sh | bash
+
+          # Windows
+          powershell -c "iwr -Uri https://github.com/${{ github.repository }}/releases/download/$TAG/install.ps1 | iex"
+          \`\`\`
+
+          ## Downloads
+
+          | Platform | Package |
+          |----------|--------|
+          | Windows x64 | \`dbshift-win-x64.zip\` |
+          | Linux x64 | \`dbshift-linux-x64.tar.gz\` |
+          | Linux arm64 | \`dbshift-linux-arm64.tar.gz\` |
+          | macOS x64 | \`dbshift-osx-x64.tar.gz\` |
+          | macOS arm64 | \`dbshift-osx-arm64.tar.gz\` |
+
+          ---
+
+          ## Changelog
+
+          See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/$TAG/CHANGELOG.md) for details.
+          EOF
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: DbShift ${{ github.ref_name }}
+          body_path: ./release-notes.md
+          draft: false
+          prerelease: false
+          files: |
+            ./release-artifacts/dbshift-*.zip
+            ./release-artifacts/dbshift-*.tar.gz
+            ./release-artifacts/*.nupkg
+            ./release-artifacts/*.snupkg

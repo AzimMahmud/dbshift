@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Discussions
+    url: https://github.com/your-org/dbshift/discussions
+    about: Ask questions, share ideas, or get help with configuration.
+  - name: Documentation
+    url: https://github.com/your-org/dbshift/blob/main/docs/USAGE.md
+    about: Read the full usage guide before opening an issue.
