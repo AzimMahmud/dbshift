@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # DbShift – official install script
-# Usage: curl -fsSL https://github.com/your-org/dbshift/releases/latest/download/install.sh | bash
-#   or:  bash <(curl -fsSL https://github.com/your-org/dbshift/releases/latest/download/install.sh)
+# Usage: curl -fsSL https://github.com/AzimMahmud/dbshift/releases/latest/download/install.sh | bash
+#   or:  bash <(curl -fsSL https://github.com/AzimMahmud/dbshift/releases/latest/download/install.sh)
 
 set -euo pipefail
 
-REPO="${REPO:-your-org/dbshift}"
+REPO="${REPO:-AzimMahmud/dbshift}"
 VERSION="${VERSION:-latest}"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 

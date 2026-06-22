@@ -26,10 +26,10 @@ A practical walkthrough from zero to production.
 
 ```bash
 # Linux / macOS
-curl -fsSL https://github.com/your-org/dbshift/releases/latest/download/install.sh | bash
+curl -fsSL https://github.com/AzimMahmud/dbshift/releases/latest/download/install.sh | bash
 
 # Windows (PowerShell)
-powershell -c "iwr -Uri https://github.com/your-org/dbshift/releases/latest/download/install.ps1 | iex"
+powershell -c "iwr -Uri https://github.com/AzimMahmud/dbshift/releases/latest/download/install.ps1 | iex"
 ```
 
 These scripts detect your OS and architecture, download the correct binary, and add it to your PATH.
@@ -38,9 +38,9 @@ These scripts detect your OS and architecture, download the correct binary, and 
 
 | Platform | Download |
 |----------|----------|
-| Windows x64 | [`dbshift-windows-x64.zip`](https://github.com/your-org/dbshift/releases/latest/download/dbshift-windows-x64.zip) |
-| Linux x64 | [`dbshift-linux-x64.tar.gz`](https://github.com/your-org/dbshift/releases/latest/download/dbshift-linux-x64.tar.gz) |
-| macOS x64 | [`dbshift-macos-x64.tar.gz`](https://github.com/your-org/dbshift/releases/latest/download/dbshift-macos-x64.tar.gz) |
+| Windows x64 | [`dbshift-windows-x64.zip`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-windows-x64.zip) |
+| Linux x64 | [`dbshift-linux-x64.tar.gz`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-linux-x64.tar.gz) |
+| macOS x64 | [`dbshift-macos-x64.tar.gz`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-macos-x64.tar.gz) |
 
 Extract and place `dbshift` (or `dbshift.exe`) anywhere on your `PATH`.
 

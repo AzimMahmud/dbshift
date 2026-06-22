@@ -19,8 +19,8 @@
     <PackageTags>database;migration;postgresql;sqlserver;mysql;sqlite;cli;flyway;schema</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/your-org/dbshift</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/your-org/dbshift</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/AzimMahmud/dbshift</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AzimMahmud/dbshift</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

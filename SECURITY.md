@@ -11,7 +11,7 @@
 We take security seriously. If you discover a security vulnerability in DbShift,
 please **do not** open a public issue. Instead, report it privately:
 
-- Open a [draft security advisory](https://github.com/your-org/dbshift/security/advisories/new)
+- Open a [draft security advisory](https://github.com/AzimMahmud/dbshift/security/advisories/new)
 - Or email the maintainers directly (check the commit history for contacts)
 
 We will acknowledge receipt within 48 hours and provide a timeline for a fix.

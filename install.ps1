@@ -1,11 +1,11 @@
 #!/usr/bin/env pwsh
 # DbShift – official Windows install script
 # Usage:
-#   powershell -c "iwr -Uri https://github.com/your-org/dbshift/releases/latest/download/install.ps1 | iex"
-#   pwsh -c "iwr -Uri https://github.com/your-org/dbshift/releases/latest/download/install.ps1 | iex"
+#   powershell -c "iwr -Uri https://github.com/AzimMahmud/dbshift/releases/latest/download/install.ps1 | iex"
+#   pwsh -c "iwr -Uri https://github.com/AzimMahmud/dbshift/releases/latest/download/install.ps1 | iex"
 
 param(
-    [string]$Repo = "your-org/dbshift",
+    [string]$Repo = "AzimMahmud/dbshift",
     [string]$Version = "latest",
     [string]$InstallDir = "$env:LOCALAPPDATA\DbShift"
 )

@@ -5,7 +5,7 @@ Thanks for your interest! Here's how to get started.
 ## Development setup
 
 ```bash
-git clone https://github.com/your-org/dbshift.git
+git clone https://github.com/AzimMahmud/dbshift.git
 cd dbshift
 dotnet restore
 dotnet build
@@ -77,4 +77,4 @@ Before submitting:
 
 ## Questions?
 
-Open a [Discussion](https://github.com/your-org/dbshift/discussions) or an Issue.
+Open a [Discussion](https://github.com/AzimMahmud/dbshift/discussions) or an Issue.

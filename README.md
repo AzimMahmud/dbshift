@@ -20,7 +20,7 @@ Beautiful CLI, zero magic, production-tested patterns.
 
 ```bash
 # Install (no .NET required)
-curl -fsSL https://github.com/your-org/dbshift/releases/latest/download/install.sh | bash
+curl -fsSL https://github.com/AzimMahmud/dbshift/releases/latest/download/install.sh | bash
 
 # Scaffold a project
 dbshift new --name MyApp --provider postgresql
@@ -61,10 +61,10 @@ No .NET SDK or runtime required — the binary is self-contained.
 
 ```bash
 # Linux / macOS
-curl -fsSL https://github.com/your-org/dbshift/releases/latest/download/install.sh | bash
+curl -fsSL https://github.com/AzimMahmud/dbshift/releases/latest/download/install.sh | bash
 
 # Windows (PowerShell)
-powershell -c "iwr -Uri https://github.com/your-org/dbshift/releases/latest/download/install.ps1 | iex"
+powershell -c "iwr -Uri https://github.com/AzimMahmud/dbshift/releases/latest/download/install.ps1 | iex"
 ```
 
 The install scripts detect your OS and architecture, download the correct pre-built binary,
@@ -74,9 +74,9 @@ and add it to your `PATH` automatically.
 
 | Platform | Download |
 |----------|----------|
-| Windows x64 | [`dbshift-windows-x64.zip`](https://github.com/your-org/dbshift/releases/latest/download/dbshift-windows-x64.zip) (~40 MB) |
-| Linux x64 | [`dbshift-linux-x64.tar.gz`](https://github.com/your-org/dbshift/releases/latest/download/dbshift-linux-x64.tar.gz) (~40 MB) |
-| macOS x64 | [`dbshift-macos-x64.tar.gz`](https://github.com/your-org/dbshift/releases/latest/download/dbshift-macos-x64.tar.gz) (~40 MB) |
+| Windows x64 | [`dbshift-windows-x64.zip`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-windows-x64.zip) (~40 MB) |
+| Linux x64 | [`dbshift-linux-x64.tar.gz`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-linux-x64.tar.gz) (~40 MB) |
+| macOS x64 | [`dbshift-macos-x64.tar.gz`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-macos-x64.tar.gz) (~40 MB) |
 
 Extract and place `dbshift` (or `dbshift.exe` on Windows) anywhere on your `PATH`.
 
@@ -92,7 +92,7 @@ dbshift --version
 ### Build from source
 
 ```bash
-git clone https://github.com/your-org/dbshift.git
+git clone https://github.com/AzimMahmud/dbshift.git
 cd dbshift
 .\publish.ps1          # Windows → dist\dbshift.exe
 ./publish.sh           # Linux/macOS → dist/dbshift

@@ -15,8 +15,8 @@
     <Authors>DbShift Contributors</Authors>
     <Copyright>Copyright (c) 2025 DbShift Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/your-org/dbshift</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/your-org/dbshift</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/AzimMahmud/dbshift</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AzimMahmud/dbshift</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true' Or '$(TF_BUILD)' == 'true'">true</ContinuousIntegrationBuild>
