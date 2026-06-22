@@ -84,7 +84,8 @@ public sealed class FileSystemConfigLoader : IConfigLoader
                 Host = Expand(dto.Database?.Host) ?? "localhost",
                 Port = dto.Database?.Port ?? 5432,
                 Name = dto.Database?.Name ?? $"{name}_db",
-                Schema = dto.Database?.Schema ?? "public"
+                Schema = dto.Database?.Schema ?? "public",
+                ConnectionString = Expand(dto.Database?.ConnectionString)
             },
             Migration = new MigrationEnvironmentSettings
             {
@@ -167,7 +168,7 @@ public sealed class FileSystemConfigLoader : IConfigLoader
         public MigrationDto? Migration { get; set; }
         public DeploymentWindowDto? DeploymentWindow { get; set; }
 
-        public sealed class DatabaseDto { public string? Host { get; set; } public int? Port { get; set; } public string? Name { get; set; } public string? Schema { get; set; } }
+        public sealed class DatabaseDto { public string? Host { get; set; } public int? Port { get; set; } public string? Name { get; set; } public string? Schema { get; set; } public string? ConnectionString { get; set; } }
         public sealed class MigrationDto { public bool? RequireApproval { get; set; } public bool? AllowRollback { get; set; } public int? LockTimeoutSeconds { get; set; } public int? MaxBatchSize { get; set; } public List<string>? AllowedRoles { get; set; } }
         public sealed class DeploymentWindowDto { public bool Enabled { get; set; } public string? StartTime { get; set; } public string? EndTime { get; set; } public List<string>? AllowedDays { get; set; } }
     }

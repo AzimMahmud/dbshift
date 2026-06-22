@@ -13,13 +13,12 @@ public sealed class CreateCommand : CommandBase
     public override string? UsageExample => "dbshift create --name AddOrders --type schema --author jane";
     public override IReadOnlyList<CommandOption> Options => new[]
     {
-        new CommandOption("name", null, "dbshift name (PascalCase)", false, "NAME"),
-        new CommandOption("type", 't', "dbshift type: schema | data | patch | rollback", false, "TYPE"),
+        new CommandOption("name", null, "Migration name (PascalCase)", false, "NAME"),
+        new CommandOption("type", 't', "Migration type: schema | data | patch | rollback | repeatable", false, "TYPE"),
         new CommandOption("author", 'a', "Author name to embed in the header", false, "NAME"),
         new CommandOption("description", 'd', "Short description to embed in the header", false, "TEXT"),
         new CommandOption("dir", null, "Override the output directory", false, "PATH"),
-        new CommandOption("sequence", null, "Use a sequence version instead of a timestamp", true, null),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
+        new CommandOption("sequence", null, "Use a sequence version instead of a timestamp", true, null)
     };
 
     public override Task<int> ExecuteAsync(CommandContext context)
@@ -33,13 +32,26 @@ public sealed class CreateCommand : CommandBase
 
         var (type, folder, prefix, templateName) = ResolveType(context.GetOption("type", "schema"));
 
-        var useTimestamp = !context.GetFlag("sequence");
-        var version = useTimestamp
-            ? DateTime.UtcNow.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture)
-            : NextSequence(host, folder, prefix);
+        string version;
+        string fileName;
 
-        var namePart = type == MigrationType.Rollback ? $"Rollback_{name}" : name;
-        var fileName = $"{prefix}{version}__{namePart}.sql";
+        if (type == MigrationType.Repeatable)
+        {
+            version = "R";
+            fileName = $"R__{name}.sql";
+        }
+        else
+        {
+            var useTimestamp = !context.GetFlag("sequence");
+            version = useTimestamp
+                ? DateTime.UtcNow.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture)
+                : NextSequence(host, folder, prefix);
+
+            var namePart = type == MigrationType.Rollback ? $"Rollback_{name}" : name;
+            fileName = $"{prefix}{version}__{namePart}.sql";
+        }
+
+        var displayFileName = type == MigrationType.Repeatable ? $"R__{name}" : $"{prefix}{version}__{(type == MigrationType.Rollback ? $"Rollback_{name}" : name)}";
 
         var outputDir = context.GetOption("dir") ?? Path.Combine(host.ScriptsPath, folder);
         Directory.CreateDirectory(outputDir);
@@ -65,7 +77,7 @@ public sealed class CreateCommand : CommandBase
         }
         else
         {
-            ConsoleHelper.PrintSuccess($"Created {type} dbshift '{prefix}{version}__{namePart}'.");
+            ConsoleHelper.PrintSuccess($"Created {type} migration '{displayFileName}'.");
             ConsoleHelper.PrintKeyValue("file", fullPath);
         }
         return Task.FromResult(0);
@@ -76,6 +88,7 @@ public sealed class CreateCommand : CommandBase
         "data" => (MigrationType.Data, "Data", "V", "data_migration.sql"),
         "patch" => (MigrationType.Patch, "Patch", "V", "patch_migration.sql"),
         "rollback" => (MigrationType.Rollback, "Rollback", "U", "rollback_migration.sql"),
+        "repeatable" => (MigrationType.Repeatable, "Schema", "R", "repeatable_migration.sql"),
         _ => (MigrationType.Schema, "Schema", "V", "schema_migration.sql")
     };
 

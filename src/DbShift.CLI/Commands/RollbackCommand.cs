@@ -11,12 +11,9 @@ public sealed class RollbackCommand : CommandBase
     public override string? UsageExample => "dbshift rollback --environment local --count 1";
     public override IReadOnlyList<CommandOption> Options => new[]
     {
-        new CommandOption("environment", 'e', "Target environment", false, "NAME"),
         new CommandOption("version", 'V', "Specific version to roll back (default: last)", false, "VERSION"),
         new CommandOption("count", 'n', "Number of recent migrations to roll back", false, "N"),
-        new CommandOption("executed-by", 'u', "User performing the rollback", false, "NAME"),
-        new CommandOption("yes", 'y', "Skip interactive confirmation", true, null),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
+        new CommandOption("executed-by", 'u', "User performing the rollback", false, "NAME")
     };
 
     public override async Task<int> ExecuteAsync(CommandContext context)
@@ -59,9 +56,9 @@ public sealed class RollbackCommand : CommandBase
         {
             var label = request.Version.Equals("last", StringComparison.OrdinalIgnoreCase)
                 ? $"the last {request.Count} migration(s)"
-                : $"dbshift '{request.Version}'";
+                : $"migration '{request.Version}'";
             ConsoleHelper.PrintWarning($"This will roll back {label} on '{host.EnvironmentName}'.");
-            if (!context.AssumeYes && !context.GetFlag("yes") && !ConsoleHelper.Confirm("Proceed with rollback?", false))
+            if (!context.AssumeYes && !ConsoleHelper.Confirm("Proceed with rollback?", false))
             {
                 ConsoleHelper.PrintWarning("Rollback cancelled.");
                 return 1;

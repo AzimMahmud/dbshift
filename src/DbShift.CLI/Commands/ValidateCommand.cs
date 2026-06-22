@@ -9,11 +9,7 @@ public sealed class ValidateCommand : CommandBase
     public override string Description => "Validate migration scripts (naming, syntax, duplicates, dependencies).";
     public override string Category => "Validation";
     public override string? UsageExample => "dbshift validate --environment local";
-    public override IReadOnlyList<CommandOption> Options => new[]
-    {
-        new CommandOption("environment", 'e', "Target environment", false, "NAME"),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
-    };
+    public override IReadOnlyList<CommandOption> Options => Array.Empty<CommandOption>();
 
     public override async Task<int> ExecuteAsync(CommandContext context)
     {

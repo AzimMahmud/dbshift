@@ -10,9 +10,7 @@ public sealed class HistoryCommand : CommandBase
     public override string? UsageExample => "dbshift history --environment local --limit 25";
     public override IReadOnlyList<CommandOption> Options => new[]
     {
-        new CommandOption("environment", 'e', "Target environment", false, "NAME"),
-        new CommandOption("limit", 'n', "Maximum entries to display", false, "N"),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
+        new CommandOption("limit", 'n', "Maximum entries to display", false, "N")
     };
 
     public override async Task<int> ExecuteAsync(CommandContext context)

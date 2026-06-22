@@ -246,6 +246,15 @@ public sealed class NewCommand : CommandBase
             -- TODO: add your rollback SQL here
             """);
 
+        WriteFile("Database/Templates/repeatable_migration.sql", """
+            -- Migration: {{NAME}}
+            -- Author: {{AUTHOR}}
+            -- Created: {{DATE}}
+            -- Description: {{DESCRIPTION}}
+
+            -- TODO: add your repeatable SQL here (re-applied when checksum changes)
+            """);
+
         // ── .gitignore ──────────────────────────────────────────────────
         WriteFile(".gitignore", $$"""
             # DbShift project scaffold

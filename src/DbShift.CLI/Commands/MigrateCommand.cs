@@ -13,13 +13,10 @@ public sealed class MigrateCommand : CommandBase
     public override string? UsageExample => "dbshift migrate --environment production --approver jane@corp.com";
     public override IReadOnlyList<CommandOption> Options => new[]
     {
-        new CommandOption("environment", 'e', "Target environment", false, "NAME"),
         new CommandOption("executed-by", 'u', "User performing the deployment", false, "NAME"),
         new CommandOption("approver", null, "Approver identity (required for approval-gated environments)", false, "EMAIL"),
-        new CommandOption("batch-size", 'b', "Override the dbshift batch size", false, "N"),
-        new CommandOption("force", 'f', "Proceed even outside the deployment window", true, null),
-        new CommandOption("yes", 'y', "Skip interactive confirmation", true, null),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
+        new CommandOption("batch-size", 'b', "Override the migration batch size", false, "N"),
+        new CommandOption("force", 'f', "Proceed even outside the deployment window", true, null)
     };
 
     public override async Task<int> ExecuteAsync(CommandContext context)
@@ -84,7 +81,7 @@ public sealed class MigrateCommand : CommandBase
             return Fail(context, "This environment requires approval. Provide --approver or confirm interactively.");
         }
 
-        if (!context.Json && !context.AssumeYes && !context.GetFlag("yes"))
+        if (!context.Json && !context.AssumeYes)
         {
             if (!ConsoleHelper.Confirm($"Apply {plan.TotalCount} migration(s) to '{host.EnvironmentName}'?", false))
             {
@@ -162,7 +159,7 @@ public sealed class MigrateCommand : CommandBase
             return approver;
         }
 
-        if (context.Json || context.AssumeYes || context.GetFlag("yes"))
+        if (context.Json || context.AssumeYes)
         {
             return null;
         }

@@ -29,6 +29,7 @@ public sealed class DatabaseEndpoint
     public int Port { get; set; } = 5432;
     public string Name { get; set; } = string.Empty;
     public string Schema { get; set; } = "public";
+    public string? ConnectionString { get; set; }
 }
 
 /// <summary>Migration policy settings scoped to an environment.</summary>

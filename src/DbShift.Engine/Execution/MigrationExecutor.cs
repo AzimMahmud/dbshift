@@ -235,10 +235,28 @@ public sealed class MigrationExecutor
         }
     }
 
-    /// <summary>Repairs a failed migration by re-queuing it as pending (and optionally removing its failed record).</summary>
-    public async Task<RepairResult> RepairAsync(string environment, string version, CancellationToken cancellationToken = default)
+    /// <summary>Repairs a failed migration by re-queuing it as pending (and optionally removing its failed record). When <paramref name="version"/> is null or empty, all failed migrations are repaired.</summary>
+    public async Task<RepairResult> RepairAsync(string environment, string? version, CancellationToken cancellationToken = default)
     {
         var result = new RepairResult();
+
+        if (string.IsNullOrWhiteSpace(version))
+        {
+            var all = await _tracker.GetAllAsync(environment, cancellationToken);
+            foreach (var failed in all.Where(r => r.Status == MigrationStatus.Failed))
+            {
+                await _tracker.DeleteAsync(environment, failed.Version, cancellationToken);
+                result.RepairedMigrations.Add(failed.Version);
+            }
+
+            result.IsSuccess = true;
+            await AuditSafe(environment, AuditAction.Repair, "system",
+                result.RepairedMigrations.Count > 0
+                    ? $"repaired {result.RepairedMigrations.Count} migration(s)"
+                    : "no failed migrations to repair");
+            return result;
+        }
+
         var record = await _tracker.GetByVersionAsync(environment, version, cancellationToken);
 
         if (record is null)

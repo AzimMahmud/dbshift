@@ -9,11 +9,7 @@ public sealed class StatusCommand : CommandBase
     public override string Description => "Show the migration status for an environment.";
     public override string Category => "Inspection";
     public override string? UsageExample => "dbshift status --environment local";
-    public override IReadOnlyList<CommandOption> Options => new[]
-    {
-        new CommandOption("environment", 'e', "Target environment", false, "NAME"),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
-    };
+    public override IReadOnlyList<CommandOption> Options => Array.Empty<CommandOption>();
 
     public override async Task<int> ExecuteAsync(CommandContext context)
     {

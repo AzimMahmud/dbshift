@@ -7,12 +7,10 @@ public sealed class RepairCommand : CommandBase
     public override string Name => "repair";
     public override string Description => "Repair the migration history (re-queue a failed migration).";
     public override string Category => "Execution";
-    public override string? UsageExample => "dbshift repair --environment local --version 001";
+    public override string? UsageExample => "dbshift repair --environment local";
     public override IReadOnlyList<CommandOption> Options => new[]
     {
-        new CommandOption("environment", 'e', "Target environment", false, "NAME"),
-        new CommandOption("version", 'V', "Version to repair", false, "VERSION"),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
+        new CommandOption("version", 'V', "Specific version to repair (omit to repair all failed migrations)", false, "VERSION")
     };
 
     public override async Task<int> ExecuteAsync(CommandContext context)
@@ -25,17 +23,14 @@ public sealed class RepairCommand : CommandBase
         }
 
         var version = context.GetOption("version");
-        if (string.IsNullOrWhiteSpace(version))
-        {
-            return Fail(context, "The --version option is required.");
-        }
+        var label = string.IsNullOrWhiteSpace(version) ? "all failed migrations" : $"migration {version}";
 
         if (!context.Json)
         {
             ConsoleHelper.PrintHeader($"Repairing '{host.EnvironmentName}'");
         }
 
-        var result = await ConsoleHelper.RunWithSpinner($"Repairing dbshift {version}", () => host.Executor.RepairAsync(host.EnvironmentName, version));
+        var result = await ConsoleHelper.RunWithSpinner($"Repairing {label}", () => host.Executor.RepairAsync(host.EnvironmentName, version));
 
         if (context.Json)
         {
@@ -47,12 +42,12 @@ public sealed class RepairCommand : CommandBase
         {
             foreach (var repaired in result.RepairedMigrations)
             {
-                ConsoleHelper.PrintSuccess($"Repaired dbshift '{repaired}'.");
+                ConsoleHelper.PrintSuccess($"Repaired migration '{repaired}'.");
             }
         }
         else
         {
-            ConsoleHelper.PrintInfo("No failed migrations needed repair.");
+            ConsoleHelper.PrintInfo("No failed migrations need repair.");
         }
         return result.IsSuccess ? 0 : 1;
     }

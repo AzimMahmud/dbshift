@@ -8,11 +8,7 @@ public sealed class InitCommand : CommandBase
     public override string Description => "Create the migration tracking schema on the target database.";
     public override string Category => "Setup";
     public override string? UsageExample => "dbshift init --environment local";
-    public override IReadOnlyList<CommandOption> Options => new[]
-    {
-        new CommandOption("environment", 'e', "Target environment", false, "NAME"),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
-    };
+    public override IReadOnlyList<CommandOption> Options => Array.Empty<CommandOption>();
 
     public override async Task<int> ExecuteAsync(CommandContext context)
     {

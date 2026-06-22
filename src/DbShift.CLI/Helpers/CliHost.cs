@@ -60,7 +60,7 @@ public sealed class CliHost
 
         var environment = string.IsNullOrWhiteSpace(context.EnvironmentName) ? "local" : context.EnvironmentName;
 
-        var connectionString = ResolveConnectionString(context, config);
+        var connectionString = ResolveConnectionString(context, config, configLoader, environment);
         var providerName = !string.IsNullOrWhiteSpace(context.Provider) ? context.Provider : (config?.Provider ?? "postgresql");
         var scriptsPath = ResolveScriptsPath(basePath, config);
         var commandTimeout = config?.CommandTimeoutSeconds ?? 3600;
@@ -100,7 +100,7 @@ public sealed class CliHost
         return new CliHost(executor, configLoader, config, environment, !preferInMemory, connectionString, providerName, scriptsPath, basePath);
     }
 
-    private static string? ResolveConnectionString(CommandContext context, MigrationConfiguration? config)
+    private static string? ResolveConnectionString(CommandContext context, MigrationConfiguration? config, IConfigLoader configLoader, string environment)
     {
         if (!string.IsNullOrWhiteSpace(context.ConnectionString))
         {
@@ -111,6 +111,19 @@ public sealed class CliHost
         if (!string.IsNullOrWhiteSpace(fromEnv))
         {
             return fromEnv;
+        }
+
+        try
+        {
+            var envConfig = configLoader.LoadEnvironment(environment);
+            if (!string.IsNullOrWhiteSpace(envConfig.Database.ConnectionString))
+            {
+                return envConfig.Database.ConnectionString;
+            }
+        }
+        catch (Exception)
+        {
+            // Environment file may not exist; fall through to global config.
         }
 
         return string.IsNullOrWhiteSpace(config?.ConnectionString) ? null : config.ConnectionString;

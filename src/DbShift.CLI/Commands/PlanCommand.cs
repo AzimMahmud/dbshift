@@ -10,9 +10,7 @@ public sealed class PlanCommand : CommandBase
     public override string? UsageExample => "dbshift plan --environment local";
     public override IReadOnlyList<CommandOption> Options => new[]
     {
-        new CommandOption("environment", 'e', "Target environment", false, "NAME"),
-        new CommandOption("executed-by", 'u', "User performing the run", false, "NAME"),
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
+        new CommandOption("executed-by", 'u', "User performing the run", false, "NAME")
     };
 
     public override async Task<int> ExecuteAsync(CommandContext context)

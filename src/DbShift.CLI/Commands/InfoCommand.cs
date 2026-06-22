@@ -8,10 +8,7 @@ public sealed class InfoCommand : CommandBase
     public override string Description => "Show configuration, environments and repository details.";
     public override string Category => "Inspection";
     public override string? UsageExample => "dbshift info";
-    public override IReadOnlyList<CommandOption> Options => new[]
-    {
-        new CommandOption("json", null, "Emit machine-readable JSON", true, null)
-    };
+    public override IReadOnlyList<CommandOption> Options => Array.Empty<CommandOption>();
 
     public override Task<int> ExecuteAsync(CommandContext context)
     {
