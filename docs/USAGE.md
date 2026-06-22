@@ -116,6 +116,7 @@ Database/
     data_migration.sql
     patch_migration.sql
     rollback_migration.sql
+    repeatable_migration.sql
 .github/workflows/
   database-migration.yml               # GitHub Actions CI pipeline
 .gitignore
@@ -196,9 +197,12 @@ Connection string resolution order:
 
 1. `--connection-string` CLI flag
 2. `DB_CONNECTION_STRING` environment variable
-3. `migration.json` → `connectionString`
+3. `environments/<name>.json` → `database.connectionString` (with `${VAR}` expansion)
+4. `migration.json` → `database.connectionString` (with `${VAR}` expansion)
 
 ### 2.4 Environment files
+
+Per-environment files let you override the connection string and policy for each target. All fields support `${VAR}` expansion from environment variables, so secrets never need to be committed.
 
 `Database/Config/environments/local.json`:
 
@@ -206,14 +210,10 @@ Connection string resolution order:
 {
   "name": "local",
   "database": {
-    "host": "localhost",
-    "port": 5432,
-    "name": "myapp_local",
-    "schema": "public"
+    "connectionString": "${DB_CONNECTION_STRING}"
   },
   "migration": {
     "requireApproval": false,
-    "allowRollback": true,
     "lockTimeoutSeconds": 30,
     "maxBatchSize": 10
   }
@@ -226,17 +226,12 @@ Connection string resolution order:
 {
   "name": "production",
   "database": {
-    "host": "${PROD_DB_HOST}",
-    "port": 5432,
-    "name": "myapp_prod",
-    "schema": "public"
+    "connectionString": "${PROD_DB_CONNECTION_STRING}"
   },
   "migration": {
     "requireApproval": true,
-    "allowRollback": true,
     "lockTimeoutSeconds": 300,
-    "maxBatchSize": 5,
-    "allowedRoles": ["admin", "deployer"]
+    "maxBatchSize": 5
   },
   "deploymentWindow": {
     "enabled": true,
@@ -246,6 +241,8 @@ Connection string resolution order:
   }
 }
 ```
+
+When you run `dbshift migrate --environment production`, the tool resolves the connection string from the production environment file first (step 3 above), falling back to the global `migration.json` if the environment file doesn't specify one.
 
 ### 2.5 Information commands
 
@@ -335,6 +332,9 @@ dbshift create --name FixIndexes --type patch
 
 # Rollback script
 dbshift create --name CreateUsersTable --type rollback
+
+# Repeatable script (R__ prefix, re-applied when checksum changes)
+dbshift create --name RefreshUserView --type repeatable
 
 # Specify output directory
 dbshift create --name AddColumns --type schema --dir ./Database/Migrations/Schema
@@ -493,10 +493,14 @@ Shows the audit log: who did what, when, and details.
 If a migration fails (e.g. because of a syntax error), fix the SQL, then:
 
 ```bash
+# Repair a specific failed migration
 dbshift repair --version 005
+
+# Repair all failed migrations at once
+dbshift repair
 ```
 
-This removes the failed record from `__migration_history`, allowing the migration to be retried. It does NOT undo any database changes the failed script may have made — you need to clean those up manually.
+This removes the failed record(s) from `__migration_history`, allowing the migration(s) to be retried. It does NOT undo any database changes the failed script may have made — you need to clean those up manually.
 
 ---
 
@@ -745,7 +749,7 @@ dbshift migrate --environment production --approver deploy-bot --force --yes
 **Fix**:
 1. Fix the SQL in the file
 2. Revert any partial changes the failed script made to the database
-3. Run `dbshift repair --version 005` to remove the failed record
+3. Run `dbshift repair --version 005` (or just `dbshift repair` to fix all failures) to remove the failed record
 4. Run `dbshift migrate` again
 
 ### 9.2 Validation errors
@@ -785,7 +789,7 @@ Could not acquire migration lock for environment 'production'. Another deploymen
 
 **Check**:
 - Is another CI job running `dbshift migrate` at the same time?
-- Wait for it to finish, or run `dbshift repair` to check lock status
+- Wait for it to finish, or run `dbshift repair` to clear the failed state
 
 ### 9.6 Config file not found
 
@@ -821,13 +825,14 @@ If you see spinner text or markdown mixed in with JSON output, you may be using 
 | Scaffold a new project | `dbshift new --name MyApp --provider postgresql` |
 | Check my setup | `dbshift info` |
 | Create a migration | `dbshift create --name Foo --type schema` |
+| Create a repeatable | `dbshift create --name RefreshView --type repeatable` |
 | Validate all scripts | `dbshift validate` |
 | Preview changes | `dbshift plan` |
 | Create tracking tables | `dbshift init -c "..."` |
 | Deploy | `dbshift migrate -c "..."` |
 | Check what's deployed | `dbshift status` |
 | Roll back | `dbshift rollback` |
-| Fix a failed migration | `dbshift repair --version 003` |
+| Fix a failed migration | `dbshift repair` or `dbshift repair --version 003` |
 | See the audit log | `dbshift history` |
 | Run without DB | all commands using `--in-memory` |
 | Switch database engine | `-p sqlserver` or `-p mysql` or `-p sqlite` |

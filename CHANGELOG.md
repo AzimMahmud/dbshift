@@ -2,6 +2,28 @@
 
 All notable changes to the DbShift project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- **Per-environment connection strings** — `environments/<name>.json` can now specify `database.connectionString`, resolved as step 3 in the connection string lookup chain (CLI flag → env var → environment file → global config).
+- **Repeatable migration creation** — `dbshift create --type repeatable` generates `R__Name.sql` scripts (the parser already supported them).
+- **`repeatable_migration.sql` template** — included in the scaffolded `Database/Templates/` directory.
+- **`repair` without `--version`** — running `dbshift repair` with no version now re-queues all failed migrations at once.
+
+### Changed
+
+- Connection string resolution is now a 4-step chain: `--connection-string` → `DB_CONNECTION_STRING` env var → `environments/<name>.json` → `migration.json`.
+- `repair --version` is now optional (was previously required).
+- Removed redundant global-option redeclarations (`environment`, `json`, `yes`) from individual command definitions — they are already parsed globally.
+- Removed redundant `GetFlag("yes")` checks in `migrate` and `rollback` commands (duplicated `AssumeYes`).
+
+### Fixed
+
+- Per-environment `connectionString` fields are no longer silently ignored during deserialization.
+- User-facing strings that incorrectly used "dbshift" instead of "migration" (create, migrate, rollback, repair commands).
+- Grammar: "No failed migrations needed repair" → "No failed migrations need repair".
+
 ## [1.0.0] — 2026-06-17
 
 ### Added

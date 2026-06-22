@@ -139,7 +139,7 @@ dbshift --version
 |---------|---------|-------------|-------------|
 | `migrate` | `deploy`, `apply` | Apply pending migrations to the target environment. | yes |
 | `rollback` | | Roll back one or more previously applied migrations using `U` scripts. | yes |
-| `repair` | | Re-queue a failed migration so it can be retried. | yes |
+| `repair` | | Re-queue one or all failed migrations so they can be retried. | yes |
 
 ### Global options
 
@@ -199,7 +199,8 @@ my-db-project/
 │       ├── schema_migration.sql
 │       ├── data_migration.sql
 │       ├── patch_migration.sql
-│       └── rollback_migration.sql
+│       ├── rollback_migration.sql
+│       └── repeatable_migration.sql
 ├── .github/workflows/database-migration.yml
 └── .gitignore
 ```
@@ -214,7 +215,7 @@ dbshift create --name AddOrders --type schema
 # → Creates Database/Migrations/Schema/V20260617120000__AddOrders.sql
 ```
 
-Types: `schema` (DDL), `data` (DML), `patch` (hotfix), `rollback` (U script).
+Types: `schema` (DDL), `data` (DML), `patch` (hotfix), `rollback` (U script), `repeatable` (R script).
 
 ### 3. Write SQL
 
@@ -268,7 +269,7 @@ dbshift migrate --environment production
 
 ```bash
 dbshift rollback --count 1                     # undo the last migration
-dbshift rollback --version V002                # roll back a specific version
+dbshift rollback --version 002                 # roll back a specific version
 ```
 
 Requires a matching `U` script in `Database/Migrations/Rollback/`.
@@ -364,7 +365,8 @@ Optional metadata headers:
 ```
 1. --connection-string CLI flag
 2. DB_CONNECTION_STRING environment variable
-3. migration.json → database.connectionString (with ${VAR} expansion)
+3. environments/<name>.json → database.connectionString (with ${VAR} expansion)
+4. migration.json → database.connectionString (with ${VAR} expansion)
 ```
 
 ---
