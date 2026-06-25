@@ -7,7 +7,8 @@
 A Flyway-style migration tool for **PostgreSQL**, **SQL Server**, **MySQL**, and **SQLite**.
 Beautiful CLI, zero magic, production-tested patterns.
 
-[![Build](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![CI](https://github.com/AzimMahmud/dbshift/actions/workflows/ci.yml/badge.svg)](https://github.com/AzimMahmud/dbshift/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/AzimMahmud/dbshift?include_prereleases&color=success)](https://github.com/AzimMahmud/dbshift/releases)
 [![.NET](https://img.shields.io/badge/.NET-6.0%20|%208.0%20|%2010.0-512bd4)]()
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
@@ -76,11 +77,17 @@ and add it to your `PATH` automatically.
 |----------|----------|
 | Windows x64 | [`dbshift-windows-x64.zip`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-windows-x64.zip) (~40 MB) |
 | Linux x64 | [`dbshift-linux-x64.tar.gz`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-linux-x64.tar.gz) (~40 MB) |
+| Linux arm64 | [`dbshift-linux-arm64.tar.gz`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-linux-arm64.tar.gz) (~40 MB) |
 | macOS x64 | [`dbshift-macos-x64.tar.gz`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-macos-x64.tar.gz) (~40 MB) |
+| macOS arm64 | [`dbshift-macos-arm64.tar.gz`](https://github.com/AzimMahmud/dbshift/releases/latest/download/dbshift-macos-arm64.tar.gz) (~40 MB) |
 
 Extract and place `dbshift` (or `dbshift.exe` on Windows) anywhere on your `PATH`.
 
 ### .NET global tool
+
+> **Note:** Publication to NuGet is pending. Until the package is listed, use the
+> [one-liner](#one-liner-recommended) or [manual download](#manual-download) above —
+> no .NET runtime is required. The command below will work as soon as the package is published.
 
 Requires [.NET SDK 6.0, 8.0, or 10.0](https://dotnet.microsoft.com/download/dotnet) (any LTS from 6 onward). The package multi-targets `net6.0`, `net8.0`, and `net10.0`, so `dotnet tool install` resolves to whichever runtime you have installed (including STS runtimes 7 and 9 via NuGet fallback).
 
@@ -96,6 +103,10 @@ git clone https://github.com/AzimMahmud/dbshift.git
 cd dbshift
 .\publish.ps1          # Windows → dist\dbshift.exe
 ./publish.sh           # Linux/macOS → dist/dbshift
+
+# Optionally bundle a different .NET runtime (default: net8.0 LTS)
+FRAMEWORK=net10.0 ./publish.sh linux-x64          # Linux/macOS
+.\publish.ps1 -Runtime win-x64 -Framework net10.0  # Windows
 ```
 
 ### Verify
