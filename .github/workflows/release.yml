@@ -4,6 +4,14 @@ on:
   push:
     tags:
       - 'v*'
+  # Manual fallback in case a tag push doesn't trigger automatically.
+  # The tag must already exist; the release is built from it.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing version tag to publish (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
 
 permissions:
   contents: write
@@ -14,9 +22,13 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   PUBLISH_FRAMEWORK: net8.0
+  # The tag being released: explicit input for manual runs, otherwise the pushed tag.
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
 
 jobs:
   build:
+    # Ignore stray branch pushes — this workflow only publishes version tags.
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     strategy:
       matrix:
         include:
@@ -46,6 +58,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
 
       - uses: actions/setup-dotnet@v4
         with:
@@ -87,11 +101,14 @@ jobs:
 
   publish-nuget:
     needs: build
-    # Auto-skipped until the NUGET_API_KEY repo secret is configured.
-    if: ${{ secrets.NUGET_API_KEY != '' }}
+    # Job-level if cannot reference the secrets context, so we only gate on the
+    # trigger here and check NUGET_API_KEY per step (see "Check NuGet API key").
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
 
       - uses: actions/setup-dotnet@v4
         with:
@@ -101,7 +118,20 @@ jobs:
             10.0.x
           global-json-file: global.json
 
+      - name: Check NuGet API key
+        id: nuget
+        env:
+          KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::NUGET_API_KEY secret is not set; skipping NuGet publish."
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Pack
+        if: steps.nuget.outputs.enabled == 'true'
         run: dotnet pack src/DbShift.CLI \
           --configuration Release \
           --output ./nupkg \
@@ -110,12 +140,14 @@ jobs:
           -p:ContinuousIntegrationBuild=true
 
       - name: Push to NuGet
+        if: steps.nuget.outputs.enabled == 'true'
         run: dotnet nuget push ./nupkg/*.nupkg \
           --source https://api.nuget.org/v3/index.json \
           --api-key ${{ secrets.NUGET_API_KEY }} \
           --skip-duplicate
 
       - name: Upload NuGet package
+        if: steps.nuget.outputs.enabled == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: nupkg
@@ -126,6 +158,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -136,7 +170,7 @@ jobs:
       - name: Generate release notes
         id: notes
         run: |
-          TAG="${GITHUB_REF_NAME}"
+          TAG="${RELEASE_TAG}"
           cat <<EOF > ./release-notes.md
           # DbShift $TAG
 
@@ -150,7 +184,7 @@ jobs:
           powershell -c "iwr -Uri https://github.com/${{ github.repository }}/releases/download/$TAG/install.ps1 | iex"
           \`\`\`
 
-          > **.NET global tool** (`dotnet tool install --global DbShift`) will be available once the package is published to NuGet.
+          > **.NET global tool** (\`dotnet tool install --global DbShift\`) will be available once the package is published to NuGet.
 
           ## Downloads
 
@@ -172,7 +206,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: DbShift ${{ github.ref_name }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: DbShift ${{ env.RELEASE_TAG }}
           body_path: ./release-notes.md
           draft: false
           prerelease: false
