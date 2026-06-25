@@ -59,7 +59,7 @@ jobs:
             --results-directory ./TestResults
 
       - name: Upload coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: matrix.os == 'ubuntu-latest'
         with:
           name: coverage
@@ -85,7 +85,7 @@ jobs:
           reporttypes: MarkdownSummaryGithub
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: ./coveragereport
@@ -109,7 +109,7 @@ jobs:
         run: dotnet pack src/DbShift.CLI --configuration Release --output ./nupkg -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: Upload NuGet package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nupkg
           path: ./nupkg/*.nupkg
