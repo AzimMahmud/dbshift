@@ -1,5 +1,6 @@
 param(
     [string]$Runtime = "win-x64",
+    [string]$Framework = "net8.0",
     [string]$Output = $(Join-Path $PSScriptRoot "dist"),
     [string]$ExeName = "dbshift.exe",
     [switch]$Clean
@@ -12,10 +13,11 @@ if ($Clean -and (Test-Path $Output)) {
     Write-Host "Cleaned $Output"
 }
 
-Write-Host "Publishing dbshift ($Runtime)..." -ForegroundColor Cyan
+Write-Host "Publishing dbshift ($Runtime, $Framework)..." -ForegroundColor Cyan
 
 dotnet publish $project `
     --configuration Release `
+    --framework $Framework `
     --runtime $Runtime `
     --self-contained true `
     --output $Output `
@@ -50,3 +52,6 @@ if ($LASTEXITCODE -eq 0) {
 # win-x64, win-arm64
 # linux-x64, linux-arm64, linux-musl-x64
 # osx-x64, osx-arm64
+#
+# Override the bundled framework (default net8.0 LTS):
+#   .\publish.ps1 -Runtime win-x64 -Framework net10.0

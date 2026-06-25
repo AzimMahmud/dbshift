@@ -13,31 +13,31 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  PUBLISH_FRAMEWORK: net8.0
 
 jobs:
   build:
     strategy:
       matrix:
-        rid:
-          - win-x64
-          - linux-x64
-          - linux-arm64
-          - osx-x64
-          - osx-arm64
         include:
           - rid: win-x64
+            asset: windows-x64
             ext: .exe
             compress: zip
           - rid: linux-x64
+            asset: linux-x64
             ext: ''
             compress: tar.gz
           - rid: linux-arm64
+            asset: linux-arm64
             ext: ''
             compress: tar.gz
           - rid: osx-x64
+            asset: macos-x64
             ext: ''
             compress: tar.gz
           - rid: osx-arm64
+            asset: macos-arm64
             ext: ''
             compress: tar.gz
       fail-fast: false
@@ -49,11 +49,16 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: |
+            6.0.x
+            8.0.x
+            10.0.x
+          global-json-file: global.json
 
       - name: Publish (${{ matrix.rid }})
         run: dotnet publish src/DbShift.CLI \
           --configuration Release \
+          --framework ${{ env.PUBLISH_FRAMEWORK }} \
           --runtime ${{ matrix.rid }} \
           --self-contained true \
           --output ./publish/${{ matrix.rid }} \
@@ -67,28 +72,34 @@ jobs:
 
       - name: Compress (zip)
         if: matrix.compress == 'zip'
-        run: Compress-Archive -Path ./dbshift.exe -DestinationPath ./dbshift-${{ matrix.rid }}.zip
+        run: Compress-Archive -Path ./dbshift.exe -DestinationPath ./dbshift-${{ matrix.asset }}.zip
 
       - name: Compress (tar.gz)
         if: matrix.compress == 'tar.gz'
-        run: tar -czf ./dbshift-${{ matrix.rid }}.tar.gz ./dbshift${{ matrix.ext }}
+        run: tar -czf ./dbshift-${{ matrix.asset }}.tar.gz ./dbshift${{ matrix.ext }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dbshift-${{ matrix.rid }}
-          path: ./dbshift-${{ matrix.rid }}.*
+          name: dbshift-${{ matrix.asset }}
+          path: ./dbshift-${{ matrix.asset }}.*
           if-no-files-found: error
 
   publish-nuget:
     needs: build
+    # Auto-skipped until the NUGET_API_KEY repo secret is configured.
+    if: ${{ secrets.NUGET_API_KEY != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: |
+            6.0.x
+            8.0.x
+            10.0.x
+          global-json-file: global.json
 
       - name: Pack
         run: dotnet pack src/DbShift.CLI \
@@ -111,7 +122,7 @@ jobs:
           path: ./nupkg/*.nupkg
 
   create-release:
-    needs: [build, publish-nuget]
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -132,9 +143,6 @@ jobs:
           ## Installation
 
           \`\`\`bash
-          # .NET global tool
-          dotnet tool install --global DbShift --version ${TAG#v}
-
           # Linux / macOS
           curl -fsSL https://github.com/${{ github.repository }}/releases/download/$TAG/install.sh | bash
 
@@ -142,15 +150,17 @@ jobs:
           powershell -c "iwr -Uri https://github.com/${{ github.repository }}/releases/download/$TAG/install.ps1 | iex"
           \`\`\`
 
+          > **.NET global tool** (`dotnet tool install --global DbShift`) will be available once the package is published to NuGet.
+
           ## Downloads
 
           | Platform | Package |
           |----------|--------|
-          | Windows x64 | \`dbshift-win-x64.zip\` |
+          | Windows x64 | \`dbshift-windows-x64.zip\` |
           | Linux x64 | \`dbshift-linux-x64.tar.gz\` |
           | Linux arm64 | \`dbshift-linux-arm64.tar.gz\` |
-          | macOS x64 | \`dbshift-osx-x64.tar.gz\` |
-          | macOS arm64 | \`dbshift-osx-arm64.tar.gz\` |
+          | macOS x64 | \`dbshift-macos-x64.tar.gz\` |
+          | macOS arm64 | \`dbshift-macos-arm64.tar.gz\` |
 
           ---
 
@@ -167,7 +177,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
+            ./install.sh
+            ./install.ps1
             ./release-artifacts/dbshift-*.zip
             ./release-artifacts/dbshift-*.tar.gz
-            ./release-artifacts/*.nupkg
-            ./release-artifacts/*.snupkg

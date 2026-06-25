@@ -77,10 +77,7 @@ public sealed class NewCommand : CommandBase
 
         outputDir = Path.GetFullPath(outputDir);
 
-        if (!Directory.Exists(outputDir))
-        {
-            return Task.FromResult(Fail(context, $"Output directory '{outputDir}' does not exist."));
-        }
+        Directory.CreateDirectory(outputDir);
 
         var created = new List<string>();
         var skipped = new List<string>();

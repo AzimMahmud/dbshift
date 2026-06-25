@@ -37,8 +37,13 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
+            6.0.x
             8.0.x
+            10.0.x
           global-json-file: global.json
+
+      - name: Display SDK versions
+        run: dotnet --list-sdks
 
       - name: Restore
         run: dotnet restore
@@ -94,7 +99,11 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: |
+            6.0.x
+            8.0.x
+            10.0.x
+          global-json-file: global.json
 
       - name: Pack
         run: dotnet pack src/DbShift.CLI --configuration Release --output ./nupkg -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg

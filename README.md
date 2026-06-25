@@ -8,7 +8,7 @@ A Flyway-style migration tool for **PostgreSQL**, **SQL Server**, **MySQL**, and
 Beautiful CLI, zero magic, production-tested patterns.
 
 [![Build](https://img.shields.io/badge/build-passing-brightgreen)]()
-[![.NET](https://img.shields.io/badge/.NET-8.0-512bd4)]()
+[![.NET](https://img.shields.io/badge/.NET-6.0%20|%208.0%20|%2010.0-512bd4)]()
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
@@ -82,7 +82,7 @@ Extract and place `dbshift` (or `dbshift.exe` on Windows) anywhere on your `PATH
 
 ### .NET global tool
 
-Requires [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+Requires [.NET SDK 6.0, 8.0, or 10.0](https://dotnet.microsoft.com/download/dotnet) (any LTS from 6 onward). The package multi-targets `net6.0`, `net8.0`, and `net10.0`, so `dotnet tool install` resolves to whichever runtime you have installed (including STS runtimes 7 and 9 via NuGet fallback).
 
 ```bash
 dotnet tool install --global DbShift
@@ -510,8 +510,8 @@ dotnet test  DbShift.sln
 
 Conditions:
 - Compiled with `TreatWarningsAsErrors` — zero warnings required.
-- Target framework: `net8.0` (LTS), pinned by `global.json`.
-- Test suite: 15 tests covering `ScriptParser` and `MigrationExecutor`.
+- Target frameworks: `net6.0`, `net8.0`, `net10.0` (LTS span — runs on any .NET 6+ runtime). SDK resolved by `global.json` with `latestMajor` roll-forward.
+- Test suite: 15 tests covering `ScriptParser` and `MigrationExecutor`, executed across all three target frameworks.
 
 ---
 

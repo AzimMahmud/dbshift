@@ -25,6 +25,7 @@ public sealed partial class ScriptParser
     private const string RepeatablePrefix = "R";
     private const string Separator = "__";
 
+#if NET7_0_OR_GREATER
     [GeneratedRegex(@"^\s*--\s*Depends\s*:\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline)]
     private static partial Regex DependsRegex();
 
@@ -33,6 +34,20 @@ public sealed partial class ScriptParser
 
     [GeneratedRegex(@"^\s*--\s*Description\s*:\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline)]
     private static partial Regex DescriptionRegex();
+#else
+    private static readonly Regex _dependsRegex =
+        new(@"^\s*--\s*Depends\s*:\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+
+    private static readonly Regex _authorRegex =
+        new(@"^\s*--\s*Author\s*:\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+
+    private static readonly Regex _descriptionRegex =
+        new(@"^\s*--\s*Description\s*:\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+
+    private static Regex DependsRegex() => _dependsRegex;
+    private static Regex AuthorRegex() => _authorRegex;
+    private static Regex DescriptionRegex() => _descriptionRegex;
+#endif
 
     /// <summary>Parses a single migration script from its file path and content.</summary>
     public ParsedMigration Parse(string filePath, string content)
