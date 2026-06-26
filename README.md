@@ -1,6 +1,6 @@
 <div align="center">
 
-# DbShift
+<img src=".github/assets/logo.svg" alt="DbShift" width="480">
 
 **Database migrations that ship.**
 

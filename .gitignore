@@ -38,6 +38,7 @@ Desktop.ini
 # Published binaries
 dist/
 nupkg/
+publish/
 
 # Local runtime artifacts
 Database/Artifacts/*

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DbShift" viewBox="0 0 880 240" width="880" height="240">
+  <title>DbShift</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0ea5b7"/>
+      <stop offset="0.5" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="cyl" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+    <linearGradient id="arrow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fef08a"/>
+      <stop offset="1" stop-color="#fb923c"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0b1220" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <g id="mark" filter="url(#shadow)">
+    <rect x="20" y="20" width="200" height="200" rx="44" fill="url(#bg)"/>
+    <g transform="translate(120,120)">
+      <g fill="none" stroke="url(#cyl)" stroke-width="14" stroke-linejoin="round">
+        <ellipse cx="0" cy="-52" rx="58" ry="20"/>
+        <path d="M -58 -52 L -58 52 A 58 20 0 0 0 58 52 L 58 -52"/>
+        <path d="M -58 -12 A 58 20 0 0 0 58 -12"/>
+        <path d="M -58 24 A 58 20 0 0 0 58 24"/>
+      </g>
+      <g stroke="url(#arrow)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path d="M -34 70 L 8 70"/>
+        <path d="M 2 60 L 14 70 L 2 80"/>
+        <path d="M 18 60 L 30 70 L 18 80"/>
+      </g>
+    </g>
+  </g>
+
+  <g id="wordmark" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+    <text x="270" y="135" font-size="92" font-weight="700" fill="#0f172a">Db<tspan fill="#2563eb">Shift</tspan></text>
+    <text x="276" y="178" font-size="26" font-weight="500" fill="#64748b">database migrations that ship</text>
+  </g>
+</svg>
